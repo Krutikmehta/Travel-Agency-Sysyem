@@ -82,7 +82,8 @@ public class ActivityImplTest {
 
     @Test
     void testSignUpPassengerCapacityReached() {
-        activity.setCapacity(0);
+        activity=new ActivityImpl("Hiking", "Enjoy hiking in the mountains", 50.0, 0);
+
         assertFalse(activity.signUpPassenger(standardPassenger));
         assertEquals(0, activity.getCapacity());
         assertEquals(100.0, standardPassenger.getBalance());

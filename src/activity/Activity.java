@@ -2,6 +2,8 @@ package activity;
 
 import passenger.Passenger;
 
+import java.util.List;
+
 public interface Activity {
     String getName();
     String getDescription();
@@ -9,6 +11,6 @@ public interface Activity {
     int getCapacity();
     boolean isAvailable();
     boolean signUpPassenger(Passenger passenger);
-    void setCapacity(int capacity);
+    List<Integer> getPassengerList();
 }
 

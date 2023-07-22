@@ -2,17 +2,22 @@ package activity;
 
 import passenger.Passenger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ActivityImpl implements Activity {
     private String name;
     private String description;
     private double cost;
     private int capacity;
+    private List<Integer> passengerList;
 
     public ActivityImpl(String name, String description, double cost, int capacity) {
         this.name = name;
         this.description = description;
         this.cost = cost;
         this.capacity = capacity;
+        passengerList = new ArrayList<>();
     }
 
     @Override
@@ -35,21 +40,25 @@ public class ActivityImpl implements Activity {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
     @Override
     public boolean isAvailable() {
-        return capacity > 0;
+        return capacity > passengerList.size();
     }
 
     @Override
     public boolean signUpPassenger(Passenger passenger) {
+        if(passengerList.contains(passenger.getPassengerNumber())){
+            return false;
+        }
         if (isAvailable() && passenger.signUpForActivity(cost)) {
-            setCapacity((capacity - 1));
+            passengerList.add(passenger.getPassengerNumber());
             return true;
         }
         return false;
     }
+
+    public List<Integer> getPassengerList() {
+        return passengerList;
+    }
+
 }

@@ -8,6 +8,7 @@ import java.util.Set;
 import activity.Activity;
 import destination.Destination;
 import passenger.Passenger;
+import passenger.PremiumPassenger;
 
 public class TravelPackageImpl implements TravelPackage {
     private String name;
@@ -67,10 +68,12 @@ public class TravelPackageImpl implements TravelPackage {
     }
 
     @Override
-    public void addPassenger(Passenger passenger) {
+    public boolean addPassenger(Passenger passenger) {
         if (passengers.size() < passengerCapacity) {
             passengers.add(passenger);
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -94,4 +97,6 @@ public class TravelPackageImpl implements TravelPackage {
 
         return false;
     }
+
+
 }

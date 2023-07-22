@@ -11,7 +11,7 @@ public interface TravelPackage {
     List<Destination> getItinerary();
     List<Passenger> getPassengers();
     void addDestination(Destination destination);
-    void addPassenger(Passenger passenger);
+    boolean addPassenger(Passenger passenger);
     Passenger findPassengerByNumber(int passengerNumber);
     boolean signUpPassengerForActivity(Passenger passenger,Activity activity);
 }

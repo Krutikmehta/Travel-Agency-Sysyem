@@ -2,62 +2,38 @@ import activity.*;
 import destination.*;
 import passenger.*;
 import travel.*;
+import utils.PrintUtils;
+import utils.PrintUtilsImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-//
-//public class Main {
-//    public static void main(String[] args) {
-//        // Create activities
-//        Activity activity1 = new ActivityImpl("Activity1", "", 50,3);
-//        Activity activity2 = new ActivityImpl("Activity2", "",100, 5);
-//
-//        // Create destinations and add activities
-//        Destination destination1 = new DestinationImpl("Destination1");
-//        destination1.getActivities().add(activity1);
-//        destination1.getActivities().add(activity2);
-//
-//        // Create travel package and add destinations
-//        List<Destination> itinerary = new ArrayList<>();
-//        itinerary.add(destination1);
-//        TravelPackage package1 = new TravelPackageImpl("Package1", 10, itinerary);
-//
-//        // Create passengers
-//        Passenger standardPassenger = new StandardPassenger("Standard Passenger", 1, 200);
-//        Passenger goldPassenger = new GoldPassenger("Gold Passenger", 2, 300);
-//        Passenger premiumPassenger = new PremiumPassenger("Premium Passenger", 3);
-//
-//        // Add passengers to the travel package
-//        package1.addPassenger(standardPassenger);
-//        package1.addPassenger(goldPassenger);
-//        package1.addPassenger(premiumPassenger);
-//
-//        // Test signing up passengers for activities
-//        System.out.println(activity1.signUpPassenger(standardPassenger)); // Should return true
-//        System.out.println(activity2.signUpPassenger(goldPassenger));     // Should return true
-//        System.out.println(activity1.signUpPassenger(premiumPassenger));  // Should return true
-//        System.out.println(activity2.signUpPassenger(standardPassenger)); // Should return false (insufficient balance)
-//        System.out.println(activity1.isAvailable());                      // Should be false (activity1 capacity exhausted)
-//        System.out.println(activity2.isAvailable());                      // Should be true (activity2 still available)
-//    }
-//}
-
 import java.util.Scanner;
 
 public class Main {
+    private static List<TravelPackage> travelPackages;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        TravelPackage travelPackage = createTravelPackage(scanner);
-
-        System.out.println("Travel Package created: " + travelPackage.getName());
-        addDestinations(scanner, travelPackage);
-        addActivities(scanner, travelPackage);
-        addPassengers(scanner, travelPackage);
-        signUpPassengersForActivities(scanner, travelPackage);
+        travelPackages = new ArrayList<>();
+        PrintUtils printUtils = new PrintUtilsImpl();
+        while(true){
+            TravelPackage travelPackage = createTravelPackage(scanner);
+            travelPackages.add(travelPackage);
+            System.out.println("Travel Package created: " + travelPackage.getName());
+            System.out.println("# of travel packages: " + travelPackages.size());
+            addDestinations(scanner, travelPackage);
+            addActivities(scanner, travelPackage);
+            addPassengers(scanner, travelPackage);
+            signUpPassengersForActivities(scanner, travelPackage);
+            printUtils.printItinery(travelPackage);
+            printUtils.printPassengers(travelPackage);
+            printUtils.printPassengerDetails(travelPackage,1);
+            printUtils.printUnfilledActivites(travelPackage);
+        }
     }
 
     private static TravelPackage createTravelPackage(Scanner scanner) {
-        System.out.print("Enter the name of the Travel Package: ");
+        System.out.print("Enter the name of the Travel Package or ctrl+F2 to exit: ");
         String packageName = scanner.nextLine();
 
         System.out.print("Enter the passenger capacity of the Travel Package: ");
@@ -68,7 +44,7 @@ public class Main {
     }
 
     private static void addDestinations(Scanner scanner, TravelPackage travelPackage) {
-        System.out.println("Adding Destinations to the Travel Package (Type 'done' when finished):");
+        System.out.println("\n Adding Destinations to the Travel Package (Type 'done' when finished):");
         while (true) {
             System.out.print("Enter the name of the Destination or 'done': ");
             String destinationName = scanner.nextLine();
@@ -81,7 +57,7 @@ public class Main {
     }
 
     private static void addActivities(Scanner scanner, TravelPackage travelPackage) {
-        System.out.println("Adding Activities to Destinations (Type 'done' when finished):");
+        System.out.println("\n Adding Activities to Destinations (Type 'done' when finished):");
         for (Destination destination : travelPackage.getItinerary()) {
             System.out.println("Destination: " + destination.getName());
             while (true) {
@@ -108,7 +84,7 @@ public class Main {
     }
 
     private static void addPassengers(Scanner scanner, TravelPackage travelPackage) {
-        System.out.println("Adding Passengers to the Travel Package (Type 'done' when finished):");
+        System.out.println("\n Adding Passengers to the Travel Package (Type 'done' when finished):");
         while (true) {
             System.out.print("Enter the name of the Passenger or 'done': ");
             String passengerName = scanner.nextLine();
@@ -121,30 +97,42 @@ public class Main {
             scanner.nextLine(); // Consume the remaining newline
 
             System.out.print("Enter the passenger type (Standard, Gold, Premium): ");
-            String passengerType = scanner.nextLine();
+            String passengerType = scanner.nextLine().toLowerCase();
 
+            int balance = 0;
+            if(!passengerType.equals("premium")){
+                System.out.print("Enter the passenger balance amount ");
+                balance= scanner.nextInt();
+                scanner.nextLine(); // Consume the remaining newline
+
+            }
             Passenger passenger;
-            switch (passengerType.toLowerCase()) {
+            switch (passengerType) {
                 case "standard":
-                    passenger = new StandardPassenger(passengerName, passengerNumber, 1000);
+                    passenger = new StandardPassenger(passengerName, passengerNumber, balance);
                     break;
                 case "gold":
-                    passenger = new GoldPassenger(passengerName, passengerNumber, 2000);
+                    passenger = new GoldPassenger(passengerName, passengerNumber, balance);
                     break;
                 case "premium":
-                    passenger = new PremiumPassenger(passengerName, passengerNumber,0);
+                    passenger = new PremiumPassenger(passengerName, passengerNumber,balance);
                     break;
                 default:
                     System.out.println("Invalid passenger type. Using Standard Passenger by default.");
-                    passenger = new StandardPassenger(passengerName, passengerNumber, 1000);
+                    passenger = new StandardPassenger(passengerName, passengerNumber, balance);
             }
 
-            travelPackage.addPassenger(passenger);
+            boolean isPassengerAdded = travelPackage.addPassenger(passenger);
+            if(!isPassengerAdded){
+                System.out.println("Passenger limit exceeded for this package");
+                return;
+            }
+            System.out.println("Passenger added");
         }
     }
 
     private static void signUpPassengersForActivities(Scanner scanner, TravelPackage travelPackage) {
-        System.out.println("Signing up Passengers for Activities (Type 'done' when finished):");
+        System.out.println("\n Signing up Passengers for Activities (Type 'done' when finished):");
         while (true) {
             System.out.print("Enter the passenger number or 'done': ");
             String input = scanner.nextLine();
@@ -170,8 +158,11 @@ public class Main {
             for (Destination destination : travelPackage.getItinerary()) {
                 System.out.println("Destination: " + destination.getName());
                 System.out.println("Activities:");
-                for (Activity activity : destination.getActivities()) {
-                    System.out.println(activity.getName() + " - " + activity.getDescription() + " - Cost: " + activity.getCost());
+                for (Activity activity:destination.getActivities()){
+                    System.out.println("name:  "+ activity.getName());
+                    System.out.println("description:  "+ activity.getDescription());
+                    System.out.println("cost:  "+ activity.getCost());
+                    System.out.println("capacity:  "+ activity.getCapacity());
                 }
 
                 System.out.print("Enter the name of the Activity to sign up or 'skip': ");
@@ -190,7 +181,7 @@ public class Main {
                 if (signedUp) {
                     System.out.println("Passenger successfully signed up for " + selectedActivity.getName());
                 } else {
-                    System.out.println("Failed to sign up. Insufficient balance or activity capacity reached.");
+                    System.out.println("Failed to sign up. Insufficient balance or activity capacity reached or already registered.");
                 }
             }
         }

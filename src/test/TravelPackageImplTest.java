@@ -133,9 +133,8 @@ public class TravelPackageImplTest {
 
         // Attempt to add another passenger, but it should not be allowed due to capacity limit
         Passenger passenger11 = new StandardPassenger("Passenger 11", 1011, 1000);
-        travelPackage.addPassenger(passenger11);
 
-        assertEquals(10, travelPackage.getPassengers().size());
+        assertFalse(travelPackage.addPassenger(passenger11));
     }
 
     @Test

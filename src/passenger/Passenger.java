@@ -1,5 +1,10 @@
 package passenger;
 
+import activity.Activity;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract  class Passenger{
     private String name;
     private int passengerNumber;
@@ -19,14 +24,14 @@ public abstract  class Passenger{
         return passengerNumber;
     }
 
-
     public double getBalance() {
         return balance;
     }
 
-    public abstract boolean  signUpForActivity(double cost) ;
-
     public void setBalance(double balance) {
         this.balance = balance;
     }
+
+    public abstract boolean  signUpForActivity(double cost) ;
+
 }
