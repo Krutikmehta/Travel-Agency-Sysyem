@@ -57,6 +57,7 @@ public class ActivityImpl implements Activity {
         return false;
     }
 
+    @Override
     public List<Integer> getPassengerList() {
         return passengerList;
     }

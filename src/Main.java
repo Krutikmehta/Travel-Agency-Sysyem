@@ -12,28 +12,94 @@ import java.util.Scanner;
 public class Main {
     private static List<TravelPackage> travelPackages;
 
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         travelPackages = new ArrayList<>();
         PrintUtils printUtils = new PrintUtilsImpl();
         while(true){
-            TravelPackage travelPackage = createTravelPackage(scanner);
-            travelPackages.add(travelPackage);
-            System.out.println("Travel Package created: " + travelPackage.getName());
-            System.out.println("# of travel packages: " + travelPackages.size());
-            addDestinations(scanner, travelPackage);
-            addActivities(scanner, travelPackage);
-            addPassengers(scanner, travelPackage);
-            signUpPassengersForActivities(scanner, travelPackage);
-            printUtils.printItinery(travelPackage);
-            printUtils.printPassengers(travelPackage);
-            printUtils.printPassengerDetails(travelPackage,1);
-            printUtils.printUnfilledActivites(travelPackage);
+            System.out.println("------ options ------");
+            System.out.println("enter 0 to create a travel package");
+            System.out.println("enter 1 to get travel package itinery");
+            System.out.println("enter 2 to get travel package passengers");
+            System.out.println("enter 3 to get travel package passenger details");
+            System.out.println("enter 4 to get travel package unfilled activities");
+
+            int optionSelected = scanner.nextInt();
+            scanner.nextLine();
+            if(optionSelected == 0) {
+                travelPackageFlow(scanner, printUtils);
+            }
+            else{
+                if(travelPackages.size() == 0){
+                    System.out.println("No travel packages created. Create one first\n");
+                    continue;
+                }
+                System.out.println("Enter travel package name");
+                System.out.println("Availabe Packages - ");
+                for(TravelPackage travelPackage:travelPackages){
+                    System.out.println("pacakge name: " + travelPackage.getName());
+                }
+                String packageName = scanner.nextLine().toLowerCase();
+                TravelPackage selectedTravelPackage = null;
+                for(TravelPackage travelPackage:travelPackages){
+                    if(travelPackage.getName().toLowerCase().equals(packageName)){
+                        selectedTravelPackage = travelPackage;
+                    }
+                }
+                if(selectedTravelPackage == null){
+                    System.out.println("Travel package with the given name not found\n");
+                }else{
+                    handlePrinting(selectedTravelPackage,optionSelected,printUtils,scanner);
+                }
+
+            }
+
+
         }
     }
 
+    private static void handlePrinting(TravelPackage travelPackage,int option,PrintUtils printUtils,Scanner scanner){
+        switch (option){
+            case 1:
+                printUtils.printItinery(travelPackage);
+                break;
+            case 2:
+                printUtils.printPassengers(travelPackage);
+                break;
+            case 3:
+                System.out.println("Enter passenger number: ");
+                int passengerNumber = scanner.nextInt();
+                scanner.nextLine();
+                printUtils.printPassengerDetails(travelPackage,passengerNumber);
+                break;
+            case 4:
+                printUtils.printUnfilledActivites(travelPackage);
+                break;
+
+        }
+    }
+    private static void travelPackageFlow(Scanner scanner, PrintUtils printUtils){
+        TravelPackage travelPackage = createTravelPackage(scanner);
+        travelPackages.add(travelPackage);
+
+        System.out.println("Travel Package created: " + travelPackage.getName());
+        System.out.println("# of travel packages: " + travelPackages.size());
+
+        addDestinations(scanner, travelPackage);
+        addActivities(scanner, travelPackage);
+        addPassengers(scanner, travelPackage);
+        signUpPassengersForActivities(scanner, travelPackage);
+
+        //print the package details
+        printUtils.printItinery(travelPackage);
+        printUtils.printPassengers(travelPackage);
+        printUtils.printPassengerDetails(travelPackage,1);
+        printUtils.printUnfilledActivites(travelPackage);
+    }
+
     private static TravelPackage createTravelPackage(Scanner scanner) {
-        System.out.print("Enter the name of the Travel Package or ctrl+F2 to exit: ");
+        System.out.print("Enter the name of the Travel Package: ");
         String packageName = scanner.nextLine();
 
         System.out.print("Enter the passenger capacity of the Travel Package: ");
@@ -124,7 +190,7 @@ public class Main {
 
             boolean isPassengerAdded = travelPackage.addPassenger(passenger);
             if(!isPassengerAdded){
-                System.out.println("Passenger limit exceeded for this package");
+                System.out.println("Passenger limit exceeded for this package or same id present");
                 return;
             }
             System.out.println("Passenger added");
@@ -148,7 +214,7 @@ public class Main {
                 continue;
             }
 
-            System.out.println("Passenger " + passengerNumber + " Activities:");
+            System.out.println("Activities available");
             Passenger passenger = travelPackage.findPassengerByNumber(passengerNumber);
             if (passenger == null) {
                 System.out.println("Passenger not found.");
@@ -157,6 +223,10 @@ public class Main {
 
             for (Destination destination : travelPackage.getItinerary()) {
                 System.out.println("Destination: " + destination.getName());
+                if(destination.getActivities().size() == 0){
+                    System.out.println("Activitites: NONE");
+                    continue;
+                }
                 System.out.println("Activities:");
                 for (Activity activity:destination.getActivities()){
                     System.out.println("name:  "+ activity.getName());
@@ -187,3 +257,4 @@ public class Main {
         }
     }
 }
+

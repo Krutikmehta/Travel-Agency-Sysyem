@@ -70,6 +70,12 @@ public class TravelPackageImpl implements TravelPackage {
     @Override
     public boolean addPassenger(Passenger passenger) {
         if (passengers.size() < passengerCapacity) {
+            // test if the passenger with same id is present
+            for (Passenger tempPassenger : passengers) {
+                if (tempPassenger.getPassengerNumber() == passenger.getPassengerNumber()) {
+                    return false;
+                }
+            }
             passengers.add(passenger);
             return true;
         }

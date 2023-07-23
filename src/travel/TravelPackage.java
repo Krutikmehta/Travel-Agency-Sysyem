@@ -1,6 +1,8 @@
 package travel;
 
 import java.util.List;
+import java.util.Set;
+
 import activity.Activity;
 import destination.Destination;
 import passenger.Passenger;
