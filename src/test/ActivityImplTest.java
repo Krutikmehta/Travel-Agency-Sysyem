@@ -54,21 +54,21 @@ public class ActivityImplTest {
     @Test
     void testSignUpPassengerStandardPassengerSuccess() {
         assertTrue(activity.signUpPassenger(standardPassenger));
-        assertEquals(4, activity.getCapacity());
+        assertEquals(4, activity.getCapacity()-activity.getPassengerList().size());
         assertEquals(50.0, standardPassenger.getBalance());
     }
 
     @Test
     void testSignUpPassengerGoldPassengerSuccess() {
         assertTrue(activity.signUpPassenger(goldPassenger));
-        assertEquals(4, activity.getCapacity());
+        assertEquals(4, activity.getCapacity()-activity.getPassengerList().size());
         assertEquals(155, goldPassenger.getBalance());
     }
 
     @Test
     void testSignUpPassengerPremiumPassengerSuccess() {
         assertTrue(activity.signUpPassenger(premiumPassenger));
-        assertEquals(4, activity.getCapacity());
+        assertEquals(4, activity.getCapacity()-activity.getPassengerList().size());
         assertEquals(0.0, premiumPassenger.getBalance());
     }
 
