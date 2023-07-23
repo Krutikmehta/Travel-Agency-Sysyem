@@ -14,12 +14,12 @@ import java.util.Scanner;
 
 public class Main {
     private static List<TravelPackage> travelPackages;
-
+    private static PrintUtils printUtils;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         travelPackages = new ArrayList<>();
-        PrintUtils printUtils = new PrintUtilsImpl();
+        printUtils = new PrintUtilsImpl();
         while(true){
             System.out.println("------ options ------");
             System.out.println("enter 0 to create a travel package");
@@ -53,7 +53,7 @@ public class Main {
                 if(selectedTravelPackage == null){
                     System.out.println("Travel package with the given name not found\n");
                 }else{
-                    handlePrinting(selectedTravelPackage,optionSelected,printUtils,scanner);
+                    handlePrinting(selectedTravelPackage,optionSelected,scanner);
                 }
 
             }
@@ -62,7 +62,7 @@ public class Main {
         }
     }
 
-    private static void handlePrinting(TravelPackage travelPackage,int option,PrintUtils printUtils,Scanner scanner){
+    private static void handlePrinting(TravelPackage travelPackage,int option,Scanner scanner){
         switch (option){
             case 1:
                 printUtils.printItinery(travelPackage);
@@ -203,6 +203,7 @@ public class Main {
 
     private static void signUpPassengersForActivities(Scanner scanner, TravelPackage travelPackage) {
         System.out.println("\n Signing up Passengers for Activities (Type 'done' when finished):");
+        handlePrinting(travelPackage,2,scanner);
         while (true) {
             System.out.print("Enter the passenger number or 'done': ");
             String input = scanner.nextLine();
