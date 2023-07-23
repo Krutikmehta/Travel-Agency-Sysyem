@@ -1,3 +1,6 @@
+
+package TravelAgencySystem;
+
 import activity.*;
 import destination.*;
 import passenger.*;
@@ -68,6 +71,7 @@ public class Main {
                 printUtils.printPassengers(travelPackage);
                 break;
             case 3:
+                printUtils.printPassengers(travelPackage);
                 System.out.println("Enter passenger number: ");
                 int passengerNumber = scanner.nextInt();
                 scanner.nextLine();
@@ -191,7 +195,7 @@ public class Main {
             boolean isPassengerAdded = travelPackage.addPassenger(passenger);
             if(!isPassengerAdded){
                 System.out.println("Passenger limit exceeded for this package or same id present");
-                return;
+                continue;
             }
             System.out.println("Passenger added");
         }
