@@ -15,4 +15,5 @@ enter 2 to get travel package passengers
 enter 3 to get travel package passenger details
 enter 4 to get travel package unfilled activities
 ```
+Tests are available in [test](https://github.com/Krutikmehta/Travel-Agency-Sysyem/tree/master/src/test) folder
 
