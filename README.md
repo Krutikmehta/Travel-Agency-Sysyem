@@ -4,7 +4,7 @@ HLD - [link](https://github.com/Krutikmehta/Travel-Agency-Sysyem/blob/master/HLD
 LLD - [link](https://github.com/Krutikmehta/Travel-Agency-Sysyem/blob/master/LLD.drawio.svg)  
 
 ```
-Run the main method in TravelAgencySystem package
+Run the main method in travelAgencySystem package
 This will initiate a CLI to manage the travel agency system
 5 options are present to navigate -
 

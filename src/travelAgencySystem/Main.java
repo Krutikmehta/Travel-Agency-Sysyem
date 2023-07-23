@@ -1,5 +1,5 @@
 
-package TravelAgencySystem;
+package travelAgencySystem;
 
 import activity.*;
 import destination.*;
@@ -83,6 +83,7 @@ public class Main {
 
         }
     }
+
     private static void travelPackageFlow(Scanner scanner, PrintUtils printUtils){
         TravelPackage travelPackage = createTravelPackage(scanner);
         travelPackages.add(travelPackage);
